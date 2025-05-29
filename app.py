@@ -342,39 +342,6 @@ if st.session_state.config_loaded and st.session_state.config_data:
         else:
             st.warning("Keine Zuweisungen möglich. Überprüfe deine Konfiguration.")
 
-    # --- Aktueller Plan anzeigen (falls vorhanden) ---
-    if st.session_state.current_pivot is not None:
-        st.header("Aktueller Plan")
-        st.table(st.session_state.current_pivot)
-        
-        # Export-Buttons auch hier verfügbar machen
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            excel_data = create_excel_export(st.session_state.current_pivot, st.session_state.current_plan)
-            st.download_button(
-                label="📊 Excel Export",
-                data=excel_data,
-                file_name=f"Dienstplan_{pd.Timestamp.now().strftime('%Y%m%d_%H%M')}.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                key="excel_export_current"
-            )
-        
-        with col2:
-            csv_data = st.session_state.current_pivot.to_csv(index=True).encode('utf-8')
-            st.download_button(
-                label="📄 CSV Export",
-                data=csv_data,
-                file_name=f"Dienstplan_{pd.Timestamp.now().strftime('%Y%m%d_%H%M')}.csv",
-                mime="text/csv",
-                key="csv_export_current"
-            )
-        
-        with col3:
-            if st.button("🗑️ Plan löschen"):
-                st.session_state.current_plan = None
-                st.session_state.current_pivot = None
-                st.rerun()
-
 # --- Sidebar Aktionen ---
 st.sidebar.header("Aktionen")
 
